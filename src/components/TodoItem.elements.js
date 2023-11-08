@@ -7,7 +7,7 @@ export const TodoItemWrapper = styled.div`
   justify-content: space-between;
   border-bottom: solid 1px #eae7e7;
   padding: 5px 12px;
-  width: 40vw;
+  width: 50vw;
   height: 60px;
   transition: background-color 0.3s ease;
   color: #525151;

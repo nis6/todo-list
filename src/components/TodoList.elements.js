@@ -13,7 +13,7 @@ export const ToolBar = styled.div`
   padding: 0.5rem 0.9rem;
   justify-content: space-between;
   align-items: center;
-  width: 40vw;
+  width: 50vw;
   height: 40px;
    @media screen and (max-width: 800px) {
     width: 80vw;

@@ -8,7 +8,7 @@ export const InputContainer = styled.div`
   border: solid 1px #ccc;
   border-radius: 0.5rem;
   padding: 5px 12px;
-  width: 40vw;
+  width: 50vw;
   height: 60px;
   z-index: 1;
   position: relative;
