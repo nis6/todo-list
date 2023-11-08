@@ -1,40 +1,13 @@
 import React from "react";
-import styled from "styled-components";
 import { Assets } from "../assets";
 import InputTodo from "../components/InputTodo";
 import TodoList from "../components/TodoList";
-
-const HeaderImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 40vh;
-  object-fit: cover;
-`;
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  position: relative;
-  margin-top: 5rem;
-  gap: 2rem;
-`;
-
-const H1 = styled.h1`
-  font-size: 32px;
-  letter-spacing: 0.5rem;
-  color: white;
-  font-weight: 500;
-  margin-left: -21rem;
-`;
+import { MainContainer, H1, HeaderImage } from "./Home.elements";
 
 class Home extends React.Component {
   state = { todos: [] };
 
+  //To set up the localStorage, immediately after first mount, if it doesn't exists already
   componentDidMount() {
     var TodoList = JSON.parse(localStorage.getItem("todoList"));
     if (TodoList) {
@@ -59,6 +32,7 @@ class Home extends React.Component {
     this.setState({ todos: updatedTodos });
   };
 
+  // Method to change the complete status
   markDone = (index) => {
     const currentTodos = [...this.state.todos];
     const updatedTodos = currentTodos.map((todo, todo_index) => {
@@ -73,6 +47,7 @@ class Home extends React.Component {
     this.setState({ todos: updatedTodos });
   };
 
+  // Method to toggle the active state
   markActive = (index) => {
     const currentTodos = [...this.state.todos];
     const updatedTodos = currentTodos.map((todo, todo_index) => {
