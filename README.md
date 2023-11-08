@@ -10,8 +10,8 @@ Please clone and run on your machine
 
 ### Active Filter
 
-![Alt text](image-1.png)
+![Alt text](<Screenshot 2023-11-08 at 11.47.14 AM.png>)
 
 ### Completed Filter
 
-![Alt text](image-2.png)
+![Alt text](<Screenshot 2023-11-08 at 11.48.05 AM.png>)
