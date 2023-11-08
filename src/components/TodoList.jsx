@@ -1,64 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
 import TodoItem from "./TodoItem";
-import styled from "styled-components";
+import {
+  TodoListContainer,
+  ToolBar,
+  ButtonSecondary,
+  ButtonPrimary,
+  RowBox,
+} from "./TodoList.elements";
 
-const TodoListContainer = styled.div`
-  border-radius: 0.4rem;
-  z-index: 1;
-  position: relative;
-  background-color: white;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
-`;
+export default function TodoList({ todolist, removeTodo, markDone, markActive }) {
+  const [showCount, setCountToggle] = useState(false);
+  const [showAll, setAllToggle] = useState(true);
+  const [showActive, setActiveToggle] = useState(false);
+  const [showCompleted, setCompletedToggle] = useState(false);
 
-const ToolBar = styled.div`
-  display: flex;
-  padding: 0.5rem 0.9rem;
-  justify-content: space-between;
-  align-items: center;
-  height: 40px;
-`;
+  // Function to set the active filter and clear others
+  const setFilter = (filter) => {
+    if (filter === "all") {
+      setAllToggle(true);
+      setActiveToggle(false);
+      setCompletedToggle(false);
+    } else if (filter === "active") {
+      setAllToggle(false);
+      setActiveToggle(true);
+      setCompletedToggle(false);
+    } else if (filter === "completed") {
+      setAllToggle(false);
+      setActiveToggle(false);
+      setCompletedToggle(true);
+    }
+  };
 
-const ButtonPrimary = styled.button`
-  border: none;
-  color: #828080;
-  font-size: 0.9;
-  font-weight: 500;
-  background-color: transparent;
-  &:focus {
-    color: #3e3ef9;
-  }
-`;
+  // Filter the todos based on the visibility filter
+  const filteredTodos = todolist.filter((todo) => {
+    if (showAll) return true;
+    if (showActive) return todo.active;
+    if (showCompleted) return todo.done;
+    return true;
+  });
 
-const ButtonSecondary = styled.button`
-  border: none;
-  color: #828080;
-  font-size: 0.9rem;
-  background-color: transparent;
-  &:active {
-    color: #2b2a2a;
-  }
-`;
+  const handleClear = () => {
+    todolist.map((todo) => {
+      if (todo.done === true) removeTodo(todo.id);
+    });
+  };
 
-const RowBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-`;
-
-export default function TodoList({ todolist, removeTodo }) {
   return (
     <TodoListContainer>
-      {todolist.map((todo, index) => (
-        <TodoItem text={todo} removeTodo={removeTodo} key={index} index={index} />
+      {filteredTodos.map((todo, index) => (
+        <TodoItem
+          todo={todo}
+          removeTodo={removeTodo}
+          key={todo.id}
+          markDone={markDone}
+          markActive={markActive}
+        />
       ))}
       <ToolBar>
-        <ButtonSecondary>Count</ButtonSecondary>
+        <ButtonSecondary onClick={() => setCountToggle(!showCount)}>
+          <RowBox> Count {showCount ? <p> : {todolist.length}</p> : ""}</RowBox>
+        </ButtonSecondary>
         <RowBox>
-          <ButtonPrimary>All</ButtonPrimary>
-          <ButtonPrimary>Active</ButtonPrimary>
-          <ButtonPrimary>Completed</ButtonPrimary>
+          <ButtonPrimary onClick={() => setFilter("all")}>All</ButtonPrimary>
+          <ButtonPrimary onClick={() => setFilter("active")}>Active</ButtonPrimary>
+          <ButtonPrimary onClick={() => setFilter("completed")}>
+            Completed
+          </ButtonPrimary>
         </RowBox>
-        <ButtonSecondary>Clear Completed</ButtonSecondary>
+        <ButtonSecondary onClick={handleClear}>Clear Completed</ButtonSecondary>
       </ToolBar>
     </TodoListContainer>
   );

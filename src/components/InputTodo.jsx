@@ -1,39 +1,7 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { MdRadioButtonUnchecked } from "react-icons/md";
+import { InputContainer, RadioIcon, Input } from "./InputTodo.elements";
 
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 8px 0;
-  border: solid 1px #ccc;
-  border-radius: 0.5rem;
-  padding: 5px 12px;
-  width: 40vw;
-  height: 60px;
-  z-index: 1;
-  position: relative;
-  background-color: white;
-  @media screen and (max-width: 800px) {
-    width: 80vw;
-  }
-`;
-
-const RadioIcon = styled(MdRadioButtonUnchecked)`
-  color: #ccc;
-  font-size: 1.5rem;
-`;
-
-const Input = styled.input`
-  flex: 1;
-  padding: 8px;
-  border: none;
-  font-size: 1.1rem;
-  outline: none;
-  font-weight: 300;
-`;
-
-const InputTodo = ({ onEnter }) => {
+const InputTodo = (props) => {
   const [text, setText] = useState("");
 
   const handleInputChange = (event) => {
@@ -41,10 +9,13 @@ const InputTodo = ({ onEnter }) => {
   };
 
   const handleAddTodo = () => {
-    if (text) {
-      onEnter(text);
-      setText("");
-    }
+    props.add_todo({
+      id: Math.floor(Math.random() * 1000),
+      text: text,
+      done: false,
+      active: false,
+    });
+    setText("");
   };
 
   return (

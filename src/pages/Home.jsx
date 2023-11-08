@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Assets } from "../assets";
 import InputTodo from "../components/InputTodo";
 import TodoList from "../components/TodoList";
-import { useState } from "react";
 
 const HeaderImage = styled.img`
   position: absolute;
@@ -33,25 +32,79 @@ const H1 = styled.h1`
   margin-left: -21rem;
 `;
 
-export default function Home() {
-  const [todos, setTodos] = useState([]);
+class Home extends React.Component {
+  state = { todos: [] };
 
-  function addTodo(newTodo) {
-    setTodos([...todos, newTodo]);
+  componentDidMount() {
+    var TodoList = JSON.parse(localStorage.getItem("todoList"));
+    if (TodoList) {
+      this.setState({ todos: TodoList });
+    } else {
+      localStorage.setItem("todoList", JSON.stringify(this.state.todos));
+    }
   }
 
-  function removeTodo(index) {
-    const updatedTodos = todos.filter((_, i) => i !== index);
-    setTodos(updatedTodos);
+  addTodo = (todo) => {
+    if (!todo || /^\s*$/.test(todo)) {
+      return;
+    }
+    const newTodos = [todo, ...this.state.todos];
+    localStorage.setItem("todoList", JSON.stringify(newTodos));
+    this.setState({ todos: newTodos });
+  };
+
+  removeTodo = (index) => {
+    const updatedTodos = [...this.state.todos].filter((todo) => todo.id !== index);
+    localStorage.setItem("todoList", JSON.stringify(updatedTodos));
+    this.setState({ todos: updatedTodos });
+  };
+
+  markDone = (index) => {
+    const currentTodos = [...this.state.todos];
+    const updatedTodos = currentTodos.map((todo, todo_index) => {
+      if (todo.id !== index) return todo;
+      else {
+        currentTodos[todo_index].done = !currentTodos[todo_index].done;
+        return currentTodos[todo_index];
+      }
+    });
+
+    localStorage.setItem("todoList", JSON.stringify(updatedTodos));
+    this.setState({ todos: updatedTodos });
+  };
+
+  markActive = (index) => {
+    const currentTodos = [...this.state.todos];
+    const updatedTodos = currentTodos.map((todo, todo_index) => {
+      if (todo.id !== index) return todo;
+      else {
+        currentTodos[todo_index].active = !currentTodos[todo_index].active;
+        return currentTodos[todo_index];
+      }
+    });
+
+    localStorage.setItem("todoList", JSON.stringify(updatedTodos));
+    this.setState({ todos: updatedTodos });
+  };
+
+  render() {
+    return (
+      <div>
+        <HeaderImage src={Assets.bitmap} alt="header" />
+        <MainContainer>
+          <H1>TODO</H1>
+          <InputTodo add_todo={this.addTodo} />
+          <TodoList
+            todolist={this.state.todos}
+            removeTodo={this.removeTodo}
+            markDone={this.markDone}
+            markPending={this.markPending}
+            markActive={this.markActive}
+          />
+        </MainContainer>
+      </div>
+    );
   }
-  return (
-    <div>
-      <HeaderImage src={Assets.bitmap} alt="header" />
-      <MainContainer>
-        <H1>TODO</H1>
-        <InputTodo onEnter={addTodo} />
-        <TodoList todolist={todos} removeTodo={removeTodo} />
-      </MainContainer>
-    </div>
-  );
 }
+
+export default Home;
